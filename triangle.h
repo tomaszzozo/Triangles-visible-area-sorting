@@ -1,7 +1,7 @@
 #pragma once
 #include "point.h"
 
-class Triangle
+struct Triangle
 {
     Point p1, p2, p3;
 

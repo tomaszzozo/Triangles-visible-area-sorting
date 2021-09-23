@@ -7,6 +7,7 @@
 #define MAX_RANGE 1000
 
 double calculateVisibleArea(Point observationPoint, std::vector<Triangle> triangles);
+void calibrate(Point &observationPoint, std::vector<Triangle> &triangles);
 
 int main()
 {
@@ -38,5 +39,19 @@ int main()
 
 double calculateVisibleArea(Point observationPoint, std::vector<Triangle> triangles)
 {
+    calibrate(observationPoint, triangles);
+
     return 0;
+}
+
+// moves observation point to [0, 0, 0] and adjusts triangles accordingly
+void calibrate(Point &observationPoint, std::vector<Triangle> &triangles)
+{
+    for (auto triangle : triangles)
+    {
+        triangle.p1 -= observationPoint;
+        triangle.p2 -= observationPoint;
+        triangle.p3 -= observationPoint;
+    }
+    observationPoint = Point(0, 0, 0);
 }

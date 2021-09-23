@@ -25,3 +25,11 @@ std::ostream &operator<<(std::ostream &output, Point const &p)
     output << '[' << p.x << ", " << p.y << ", " << p.z << ']';
     return output;
 }
+
+Point &Point::operator-=(Point &p)
+{
+    this->x -= p.x;
+    this->y -= p.y;
+    this->z -= p.z;
+    return *this;
+}
