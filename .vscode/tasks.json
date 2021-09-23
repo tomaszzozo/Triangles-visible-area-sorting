@@ -27,7 +27,8 @@
             "command": "/usr/bin/clang++",
             "args": [
                 "-g",
-                "${file}",
+                "-std=c++17",
+                "*.cpp",
                 "-o",
                 "${fileDirname}/${fileBasenameNoExtension}"
             ],
@@ -37,11 +38,14 @@
             "problemMatcher": [
                 "$gcc"
             ],
-            "group": {
-                "kind": "build",
-                "isDefault": true
-            },
+            "group": "build",
             "detail": "Zadanie wygenerowane przez debuger."
-        }
+        },
+        {
+            "label": "Open Terminal",
+            "type": "shell",
+            "command": "osascript -e 'tell application \"Terminal\"\ndo script \"echo hello\"\nend tell'",
+            "problemMatcher": []
+          }
     ]
 }

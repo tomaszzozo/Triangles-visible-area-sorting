@@ -1,47 +1,31 @@
 #include <iostream>
 #include "triangle.h"
 #include <vector>
-#include <ctime>
-#include <cstdlib>
+#include <fstream>
+#include <sstream>
+#include <algorithm>
+#include "fileCorruptedException.h"
 
 #define MAX_RANGE 1000
 
-double calculateVisibleArea(Point observationPoint, std::vector<Triangle> triangles);
 void calibrate(Point &observationPoint, std::vector<Triangle> &triangles);
+void readTriangles(std::vector<Triangle> &triangles);
 
 int main()
 {
-    srand(time(nullptr));
-
     std::cout << "Please select observation point coordinates:\n";
     Point observationPoint;
-    std::cin >> observationPoint;
+    // std::cin >> observationPoint;
+    observationPoint.x = 3;
+    observationPoint.y = 3;
+    observationPoint.z = 3;
     std::cout << "\nSelected point " << observationPoint << std::endl;
-    std::cout << "\nPlease input a number of triangles to be created: ";
-    size_t trianglesCount;
-    std::cin >> trianglesCount;
-    std::cout << "\nGenerating " << trianglesCount << " triangles...\n\n";
 
+    std::cout << "\nReading triangles...\n\n";
     std::vector<Triangle> triangles;
+    readTriangles(triangles);
 
-    for (unsigned int i = 0; i < trianglesCount; i++)
-    {
-        Point p1((double)(rand() % (MAX_RANGE * 2 + 1) - MAX_RANGE) / 100, (double)(rand() % (MAX_RANGE * 2 + 1) - MAX_RANGE) / 100, (double)(rand() % (MAX_RANGE * 2 + 1) - MAX_RANGE) / 100);
-        Point p2((double)(rand() % (MAX_RANGE * 2 + 1) - MAX_RANGE) / 100, (double)(rand() % (MAX_RANGE * 2 + 1) - MAX_RANGE) / 100, (double)(rand() % (MAX_RANGE * 2 + 1) - MAX_RANGE) / 100);
-        Point p3((double)(rand() % (MAX_RANGE * 2 + 1) - MAX_RANGE) / 100, (double)(rand() % (MAX_RANGE * 2 + 1) - MAX_RANGE) / 100, (double)(rand() % (MAX_RANGE * 2 + 1) - MAX_RANGE) / 100);
-
-        triangles.emplace_back(Triangle(p1, p2, p3));
-        std::cout << "Generated triangle " << i + 1 << ": " << triangles.back() << std::endl;
-    }
-
-    std::cout << "\n\nVisible area: " << calculateVisibleArea(observationPoint, triangles) << std::endl;
-}
-
-double calculateVisibleArea(Point observationPoint, std::vector<Triangle> triangles)
-{
     calibrate(observationPoint, triangles);
-
-    return 0;
 }
 
 // moves observation point to [0, 0, 0] and adjusts triangles accordingly
@@ -54,4 +38,31 @@ void calibrate(Point &observationPoint, std::vector<Triangle> &triangles)
         triangle.p3 -= observationPoint;
     }
     observationPoint = Point(0, 0, 0);
+}
+
+// reads data from "triangles.txt"
+void readTriangles(std::vector<Triangle> &triangles)
+{
+    std::ifstream f("triangles.txt");
+    std::string data;
+    while (getline(f, data))
+    {
+        std::replace(data.begin(), data.end(), ';', ',');
+        std::stringstream temp(data);
+        std::vector<std::string> seglist;
+        std::string segment;
+        while (std::getline(temp, segment, ','))
+        {
+            seglist.push_back(segment);
+        }
+        if (seglist.size() != 9)
+        {
+            throw FileCorruptedException();
+        }
+        triangles.push_back(Triangle(
+            Point(std::stoi(seglist[0]), std::stoi(seglist[1]), std::stoi(seglist[2])),
+            Point(std::stoi(seglist[3]), std::stoi(seglist[4]), std::stoi(seglist[5])),
+            Point(std::stoi(seglist[6]), std::stoi(seglist[7]), std::stoi(seglist[8]))));
+        std::cout << "Read triangle: " << triangles.back() << std::endl;
+    }
 }

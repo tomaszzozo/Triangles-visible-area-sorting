@@ -1,6 +1,6 @@
 #include "point.h"
 
-Point::Point(double x, double y, double z)
+Point::Point(int x, int y, int z)
 {
     this->x = x;
     this->y = y;
