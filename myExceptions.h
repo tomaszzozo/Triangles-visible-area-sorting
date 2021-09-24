@@ -14,6 +14,6 @@ struct SamePointsException : public std::exception
 {
     const char *what() const throw()
     {
-        return "Can not make triangle from points that are the same!";
+        return "Can not make triangle from points that are identical!";
     }
 };
