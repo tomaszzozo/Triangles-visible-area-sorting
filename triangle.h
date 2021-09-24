@@ -1,6 +1,7 @@
 #pragma once
 #include <iostream>
 #include <vector>
+#include <set>
 #include "point.h"
 
 class Triangle
@@ -8,7 +9,6 @@ class Triangle
     Point p1, p2, p3;
     unsigned int id;
     unsigned int areaSeen;
-    std::vector<Point> fill;
     static void lineCreator(Point &p1, Point &p2, std::vector<Point> &line);
     static std::vector<Point> drawLine(Point &p1, Point &p2);
     void drawBorders();
@@ -23,6 +23,7 @@ public:
         std::vector<Point> p2p3;
     };
     Border borders;
+    std::set<Point> fill;
     Point getP1();
     Point getP2();
     Point getP3();

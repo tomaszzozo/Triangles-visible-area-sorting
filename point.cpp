@@ -65,3 +65,9 @@ bool Point::equalsIgnoresId(const Point &p)
 {
     return x == p.x && y == p.y && z == p.z;
 }
+
+// implemented to make set<Point> available to use
+bool Point::operator<(const Point &p) const
+{
+    return x + y + z < p.x + p.y + p.z;
+}

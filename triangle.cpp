@@ -56,18 +56,25 @@ void Triangle::drawBorders()
 
 void Triangle::fillBorders()
 {
+    std::vector<Point> fillRepeating;
     for (auto point : borders.p2p3)
     {
-        fill = drawLine(p1, point);
+        std::vector<Point> line = drawLine(p1, point);
+        fillRepeating.insert(fillRepeating.end(), line.begin(), line.end());
     }
     for (auto point : borders.p1p2)
     {
         std::vector<Point> line = drawLine(p3, point);
-        fill.insert(std::end(fill), std::begin(line), std::end(line));
+        fillRepeating.insert(fillRepeating.end(), line.begin(), line.end());
     }
     for (auto point : borders.p1p3)
     {
         std::vector<Point> line = drawLine(p2, point);
-        fill.insert(std::end(fill), std::begin(line), std::end(line));
+        fillRepeating.insert(fillRepeating.end(), line.begin(), line.end());
+    }
+
+    for (auto point : fillRepeating)
+    {
+        fill.insert(point);
     }
 }

@@ -17,4 +17,5 @@ struct Point
     Point getMiddle(const Point &p);
     bool operator!=(const Point &p);
     bool equalsIgnoresId(const Point &p);
+    bool operator<(const Point &p) const;
 };
