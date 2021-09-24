@@ -13,7 +13,7 @@ Triangle::Triangle(Point p1, Point p2, Point p3)
     this->p3 = p3;
     this->id = ++count;
     drawBorders();
-    fillBorders();
+    fillShape();
     areaSeen = 0;
 }
 
@@ -32,9 +32,9 @@ std::ostream &operator<<(std::ostream &output, Triangle const &t)
 
 void Triangle::lineCreator(Point &p1, Point &p2, std::set<Point> &line)
 {
-    Point middle = p1.getMiddle(p2);
-    if (middle != p1 || middle != p2)
+    if (!p1.isNeighbour(p2))
     {
+        Point middle = p1.getMiddle(p2);
         lineCreator(p1, middle, line);
         line.insert(middle);
         lineCreator(middle, p2, line);
@@ -57,7 +57,7 @@ void Triangle::drawBorders()
     borders.p2p3 = drawLine(p2, p3);
 }
 
-void Triangle::fillBorders()
+void Triangle::fillShape()
 {
     for (auto point : borders.p2p3)
     {

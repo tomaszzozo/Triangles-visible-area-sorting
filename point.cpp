@@ -12,7 +12,9 @@ Point::Point(int x, int y, int z)
 
 Point::Point(int x, int y, int z, unsigned int id)
 {
-    Point(x, y, z);
+    this->x = x;
+    this->y = y;
+    this->z = z;
     this->id = id;
 }
 
@@ -50,10 +52,10 @@ Point Point::operator-(const Point &p)
 
 Point Point::getMiddle(const Point &p)
 {
-    int x = floor((float)(p.x + x) / 2);
-    int y = floor((float)(p.y + y) / 2);
-    int z = floor((float)(p.z + z) / 2);
-    return Point(x, y, z, id);
+    int a = ceil((float)(p.x + x) / 2);
+    int b = ceil((float)(p.y + y) / 2);
+    int c = ceil((float)(p.z + z) / 2);
+    return Point(a, b, c, id);
 }
 
 bool Point::operator!=(const Point &p)
@@ -69,5 +71,10 @@ bool Point::equalsIgnoresId(const Point &p)
 // implemented to make set<Point> available to use
 bool Point::operator<(const Point &p) const
 {
-    return x + y + z < p.x + p.y + p.z;
+    return x == p.x ? y < p.y : x < p.x;
+}
+
+bool Point::isNeighbour(const Point &p)
+{
+    return (x - p.x == 0 || abs(x - p.x) == 1) && (y - p.y == 0 || abs(y - p.y) == 1) && (z - p.z == 0 || abs(z - p.z) == 1);
 }

@@ -18,4 +18,5 @@ struct Point
     bool operator!=(const Point &p);
     bool equalsIgnoresId(const Point &p);
     bool operator<(const Point &p) const;
+    bool isNeighbour(const Point &p);
 };

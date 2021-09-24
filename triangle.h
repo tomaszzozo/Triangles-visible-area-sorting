@@ -12,7 +12,7 @@ class Triangle
     static void lineCreator(Point &p1, Point &p2, std::set<Point> &line);
     static std::set<Point> drawLine(Point &p1, Point &p2);
     void drawBorders();
-    void fillBorders();
+    void fillShape();
 
 public:
     static unsigned int count;
