@@ -46,6 +46,10 @@ void calibrate(Point &observationPoint, std::vector<Triangle> &triangles)
 void readTriangles(std::vector<Triangle> &triangles)
 {
     std::ifstream f("triangles.txt");
+    if (!f.is_open())
+    {
+        throw CouldNotOpenFileException();
+    }
     std::string data;
     while (getline(f, data))
     {
@@ -67,6 +71,7 @@ void readTriangles(std::vector<Triangle> &triangles)
             Point(std::stoi(seglist[6]), std::stoi(seglist[7]), std::stoi(seglist[8]), Triangle::count + 1)));
         std::cout << "Read triangle: " << triangles.back() << std::endl;
     }
+    f.close();
 }
 
 // main algorithm of the program that is responsible for sorting the triagnles
