@@ -8,8 +8,8 @@
 #include "point.h"
 
 #define MAX_RANGE 1000
-#define FOV_WIDTH 10
-#define FOV_HEIGHT 10
+#define FOV_WIDTH 6
+#define FOV_HEIGHT 6
 
 void calibrate(Point &observationPoint, std::vector<Triangle> &triangles);
 void readTriangles(std::vector<Triangle> &triangles);
@@ -20,16 +20,14 @@ unsigned int Triangle::count = 0;
 int main()
 {
     std::cout << "Please select observation point coordinates:\n";
-    Point observationPoint;
+    Point observationPoint(0, 0, 0);
     // std::cin >> observationPoint;
-    observationPoint.x = 3;
-    observationPoint.y = 3;
-    observationPoint.z = 3;
     std::cout << "\nSelected point " << observationPoint << std::endl;
 
     std::cout << "\nReading triangles...\n\n";
     std::vector<Triangle> triangles;
     readTriangles(triangles);
+    algorithm(triangles, observationPoint);
 }
 
 // moves observation point to [0, 0, 0] and adjusts triangles accordingly
@@ -78,36 +76,42 @@ void algorithm(std::vector<Triangle> &triangles, Point &observationPoint)
 
     unsigned int fov[FOV_HEIGHT * 2][FOV_WIDTH * 2] = {0};
 
-    for (int i = -FOV_HEIGHT; i < FOV_HEIGHT; i++)
+    for (int i = FOV_HEIGHT, w = 0; i >= -FOV_HEIGHT; i--, w++)
     {
-        for (int j = -FOV_WIDTH; j < FOV_WIDTH; j++)
+        for (int j = -FOV_WIDTH, k = 0; j < FOV_WIDTH; j++, k++)
         {
             unsigned int currentWinnerId = 0;
             int currentWinnerZ = MAX_RANGE;
+            bool first = true;
             for (auto triangle : triangles)
             {
-                for (auto point : triangle.borders.p1p2)
+                std::set<Point> allPoints(triangle.fill);
+                allPoints.insert(triangle.borders.p1p2.begin(), triangle.borders.p1p2.end());
+                allPoints.insert(triangle.borders.p1p3.begin(), triangle.borders.p1p3.end());
+                allPoints.insert(triangle.borders.p2p3.begin(), triangle.borders.p2p3.end());
+
+                for (auto point : allPoints)
                 {
-                }
-                for (auto point : triangle.borders.p1p3)
-                {
-                }
-                for (auto point : triangle.borders.p2p3)
-                {
-                }
-                for (auto point : triangle.fill)
-                {
+                    if (point.y == i && point.x == j && (first || (point.z >= 0 && point.z < currentWinnerZ)))
+                    {
+                        currentWinnerId = point.id;
+                        currentWinnerZ = point.z;
+                        first = false;
+                    }
                 }
             }
+            fov[w][k] = currentWinnerId;
         }
     }
 
     // display field of view
-    for (int i = -FOV_HEIGHT; i < FOV_HEIGHT; i++)
+    std::cout << "\nColours map: \n";
+
+    for (int i = 0; i < FOV_HEIGHT * 2; i++)
     {
-        for (int j = -FOV_WIDTH; j < FOV_WIDTH; j++)
+        for (int j = 0; j < FOV_WIDTH * 2; j++)
         {
-            std::cout << fov[i][j];
+            printf("%5d ", fov[i][j]);
         }
         std::cout << std::endl;
     }
