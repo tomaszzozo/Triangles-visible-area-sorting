@@ -62,10 +62,12 @@ void Triangle::fillBorders()
     }
     for (auto point : borders.p1p2)
     {
-        fill += drawLine(p3, point);
+        std::vector<Point> line = drawLine(p3, point);
+        fill.insert(std::end(fill), std::begin(line), std::end(line));
     }
     for (auto point : borders.p1p3)
     {
-        fill += drawLine(p2, point);
+        std::vector<Point> line = drawLine(p2, point);
+        fill.insert(std::end(fill), std::begin(line), std::end(line));
     }
 }
