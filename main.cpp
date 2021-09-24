@@ -5,10 +5,11 @@
 #include <sstream>
 #include <algorithm>
 #include "myExceptions.h"
+#include "point.h"
 
 #define MAX_RANGE 1000
-#define FOV_WIDTH 1920
-#define FOV_HEIGHT 1080
+#define FOV_WIDTH 10
+#define FOV_HEIGHT 10
 
 void calibrate(Point &observationPoint, std::vector<Triangle> &triangles);
 void readTriangles(std::vector<Triangle> &triangles);
@@ -70,9 +71,45 @@ void readTriangles(std::vector<Triangle> &triangles)
     }
 }
 
+// main algorithm of the program that is responsible for sorting the triagnles
 void algorithm(std::vector<Triangle> &triangles, Point &observationPoint)
 {
     calibrate(observationPoint, triangles);
 
-    unsigned int fov[FOV_HEIGHT][FOV_WIDTH] = {0};
+    unsigned int fov[FOV_HEIGHT * 2][FOV_WIDTH * 2] = {0};
+
+    for (int i = -FOV_HEIGHT; i < FOV_HEIGHT; i++)
+    {
+        for (int j = -FOV_WIDTH; j < FOV_WIDTH; j++)
+        {
+            unsigned int currentWinnerId = 0;
+            int currentWinnerZ = MAX_RANGE;
+            for (auto triangle : triangles)
+            {
+                for (auto point : triangle.borders.p1p2)
+                {
+                }
+                for (auto point : triangle.borders.p1p3)
+                {
+                }
+                for (auto point : triangle.borders.p2p3)
+                {
+                }
+                for (auto point : triangle.fill)
+                {
+                }
+            }
+        }
+    }
+
+    // display field of view
+    for (int i = -FOV_HEIGHT; i < FOV_HEIGHT; i++)
+    {
+        for (int j = -FOV_WIDTH; j < FOV_WIDTH; j++)
+        {
+            std::cout << fov[i][j];
+        }
+        std::cout << std::endl;
+    }
+    std::cout << std::endl;
 }

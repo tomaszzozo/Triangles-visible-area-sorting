@@ -1,5 +1,6 @@
 #include "triangle.h"
 #include "myExceptions.h"
+#include <set>
 
 Triangle::Triangle(Point p1, Point p2, Point p3)
 {
@@ -29,21 +30,23 @@ std::ostream &operator<<(std::ostream &output, Triangle const &t)
     return output;
 }
 
-void Triangle::lineCreator(Point &p1, Point &p2, std::vector<Point> &line)
+void Triangle::lineCreator(Point &p1, Point &p2, std::set<Point> &line)
 {
     Point middle = p1.getMiddle(p2);
     if (middle != p1 || middle != p2)
     {
         lineCreator(p1, middle, line);
-        line.emplace_back(middle);
+        line.insert(middle);
         lineCreator(middle, p2, line);
     }
 }
 
-std::vector<Point> Triangle::drawLine(Point &p1, Point &p2)
+std::set<Point> Triangle::drawLine(Point &p1, Point &p2)
 {
-    std::vector<Point> line;
+    std::set<Point> line;
+    line.insert(p1);
     lineCreator(p1, p2, line);
+    line.insert(p2);
     return line;
 }
 
@@ -56,25 +59,19 @@ void Triangle::drawBorders()
 
 void Triangle::fillBorders()
 {
-    std::vector<Point> fillRepeating;
     for (auto point : borders.p2p3)
     {
-        std::vector<Point> line = drawLine(p1, point);
-        fillRepeating.insert(fillRepeating.end(), line.begin(), line.end());
+        std::set<Point> line = drawLine(p1, point);
+        fill.insert(line.begin(), line.end());
     }
     for (auto point : borders.p1p2)
     {
-        std::vector<Point> line = drawLine(p3, point);
-        fillRepeating.insert(fillRepeating.end(), line.begin(), line.end());
+        std::set<Point> line = drawLine(p3, point);
+        fill.insert(line.begin(), line.end());
     }
     for (auto point : borders.p1p3)
     {
-        std::vector<Point> line = drawLine(p2, point);
-        fillRepeating.insert(fillRepeating.end(), line.begin(), line.end());
-    }
-
-    for (auto point : fillRepeating)
-    {
-        fill.insert(point);
+        std::set<Point> line = drawLine(p2, point);
+        fill.insert(line.begin(), line.end());
     }
 }

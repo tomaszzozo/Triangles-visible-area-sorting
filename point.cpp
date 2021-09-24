@@ -50,9 +50,9 @@ Point Point::operator-(const Point &p)
 
 Point Point::getMiddle(const Point &p)
 {
-    int x = ceil((float)(p.x + x) / 2);
-    int y = ceil((float)(p.y + y) / 2);
-    int z = ceil((float)(p.z + z) / 2);
+    int x = floor((float)(p.x + x) / 2);
+    int y = floor((float)(p.y + y) / 2);
+    int z = floor((float)(p.z + z) / 2);
     return Point(x, y, z, id);
 }
 
