@@ -9,7 +9,7 @@
             "MAX_RANGE" : 10000,
             "FOV_WIDTH" : 6,
             "FOV_HEIGHT" : 6,
-            "observationPoint" : [0,0,0]
+            "testedObservationPoint" : [0,0,0]
         }
     }
 }
