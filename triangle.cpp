@@ -12,6 +12,7 @@ Triangle::Triangle(Point p1, Point p2, Point p3)
     this->p3 = p3;
     this->id = ++count;
     drawBorders();
+    fillBorders();
     areaSeen = 0;
 }
 
@@ -51,4 +52,20 @@ void Triangle::drawBorders()
     borders.p1p2 = drawLine(p1, p2);
     borders.p1p3 = drawLine(p1, p3);
     borders.p2p3 = drawLine(p2, p3);
+}
+
+void Triangle::fillBorders()
+{
+    for (auto point : borders.p2p3)
+    {
+        fill = drawLine(p1, point);
+    }
+    for (auto point : borders.p1p2)
+    {
+        fill += drawLine(p3, point);
+    }
+    for (auto point : borders.p1p3)
+    {
+        fill += drawLine(p2, point);
+    }
 }
