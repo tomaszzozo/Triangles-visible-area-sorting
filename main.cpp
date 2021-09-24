@@ -4,12 +4,17 @@
 #include <fstream>
 #include <sstream>
 #include <algorithm>
-#include "fileCorruptedException.h"
+#include "myExceptions.h"
 
 #define MAX_RANGE 1000
+#define FOV_WIDTH 1920
+#define FOV_HEIGHT 1080
 
 void calibrate(Point &observationPoint, std::vector<Triangle> &triangles);
 void readTriangles(std::vector<Triangle> &triangles);
+void algorithm(std::vector<Triangle> &triangles, Point &observationPoint);
+
+unsigned int Triangle::count = 0;
 
 int main()
 {
@@ -24,8 +29,6 @@ int main()
     std::cout << "\nReading triangles...\n\n";
     std::vector<Triangle> triangles;
     readTriangles(triangles);
-
-    calibrate(observationPoint, triangles);
 }
 
 // moves observation point to [0, 0, 0] and adjusts triangles accordingly
@@ -33,9 +36,9 @@ void calibrate(Point &observationPoint, std::vector<Triangle> &triangles)
 {
     for (auto triangle : triangles)
     {
-        triangle.p1 -= observationPoint;
-        triangle.p2 -= observationPoint;
-        triangle.p3 -= observationPoint;
+        triangle.setP1(triangle.getP1() - observationPoint);
+        triangle.setP2(triangle.getP2() - observationPoint);
+        triangle.setP3(triangle.getP3() - observationPoint);
     }
     observationPoint = Point(0, 0, 0);
 }
@@ -60,9 +63,16 @@ void readTriangles(std::vector<Triangle> &triangles)
             throw FileCorruptedException();
         }
         triangles.push_back(Triangle(
-            Point(std::stoi(seglist[0]), std::stoi(seglist[1]), std::stoi(seglist[2])),
-            Point(std::stoi(seglist[3]), std::stoi(seglist[4]), std::stoi(seglist[5])),
-            Point(std::stoi(seglist[6]), std::stoi(seglist[7]), std::stoi(seglist[8]))));
+            Point(std::stoi(seglist[0]), std::stoi(seglist[1]), std::stoi(seglist[2]), Triangle::count + 1),
+            Point(std::stoi(seglist[3]), std::stoi(seglist[4]), std::stoi(seglist[5]), Triangle::count + 1),
+            Point(std::stoi(seglist[6]), std::stoi(seglist[7]), std::stoi(seglist[8]), Triangle::count + 1)));
         std::cout << "Read triangle: " << triangles.back() << std::endl;
     }
+}
+
+void algorithm(std::vector<Triangle> &triangles, Point &observationPoint)
+{
+    calibrate(observationPoint, triangles);
+
+    unsigned int fov[FOV_HEIGHT][FOV_WIDTH] = {0};
 }

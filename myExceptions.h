@@ -9,3 +9,11 @@ struct FileCorruptedException : public std::exception
         return "File corrupted!";
     }
 };
+
+struct SamePointsException : public std::exception
+{
+    const char *what() const throw()
+    {
+        return "Can not make triangle from points that are the same!";
+    }
+};

@@ -1,13 +1,30 @@
 #include "point.h"
+#include <cmath>
+#include <vector>
 
 Point::Point(int x, int y, int z)
 {
     this->x = x;
     this->y = y;
     this->z = z;
+    id = 0;
+}
+
+Point::Point(int x, int y, int z, unsigned int id)
+{
+    Point(x, y, z);
+    this->id = id;
 }
 
 Point::Point() {}
+
+Point::Point(const Point &p)
+{
+    x = p.x;
+    y = p.y;
+    z = p.z;
+    id = p.id;
+}
 
 std::istream &operator>>(std::istream &input, Point &p)
 {
@@ -26,10 +43,25 @@ std::ostream &operator<<(std::ostream &output, Point const &p)
     return output;
 }
 
-Point &Point::operator-=(Point &p)
+Point Point::operator-(const Point &p)
 {
-    this->x -= p.x;
-    this->y -= p.y;
-    this->z -= p.z;
-    return *this;
+    return Point(x - p.x, y - p.y, z - p.z);
+}
+
+Point Point::getMiddle(const Point &p)
+{
+    int x = ceil((float)(p.x + x) / 2);
+    int y = ceil((float)(p.y + y) / 2);
+    int z = ceil((float)(p.z + z) / 2);
+    return Point(x, y, z, id);
+}
+
+bool Point::operator!=(const Point &p)
+{
+    return x != p.x || y != p.y || z != p.z || id != p.id;
+}
+
+bool Point::equalsIgnoresId(const Point &p)
+{
+    return x == p.x && y == p.y && z == p.z;
 }
