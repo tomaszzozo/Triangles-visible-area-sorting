@@ -75,3 +75,13 @@ void Triangle::fillShape()
         fill.insert(line.begin(), line.end());
     }
 }
+
+unsigned int Triangle::getId()
+{
+    return id;
+}
+
+void Triangle::setAreaSeen(unsigned int area)
+{
+    areaSeen = area;
+}

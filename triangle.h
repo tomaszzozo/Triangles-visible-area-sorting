@@ -27,6 +27,8 @@ public:
     Point getP1();
     Point getP2();
     Point getP3();
+    unsigned int getId();
+    void setAreaSeen(unsigned int area);
     void setP1(Point p);
     void setP2(Point p);
     void setP3(Point p);

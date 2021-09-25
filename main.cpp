@@ -7,9 +7,8 @@
 #include "myExceptions.h"
 #include "point.h"
 
-#define MAX_RANGE 1000
-#define FOV_WIDTH 6
-#define FOV_HEIGHT 6
+#define FOV_WIDTH 16
+#define FOV_HEIGHT 16
 
 void calibrate(Point &observationPoint, std::vector<Triangle> &triangles);
 void readTriangles(std::vector<Triangle> &triangles);
@@ -81,12 +80,12 @@ void algorithm(std::vector<Triangle> &triangles, Point &observationPoint)
 
     unsigned int fov[FOV_HEIGHT * 2][FOV_WIDTH * 2] = {0};
 
-    for (int i = FOV_HEIGHT, w = 0; i >= -FOV_HEIGHT; i--, w++)
+    for (int i = FOV_HEIGHT - 1, w = 0; i >= -FOV_HEIGHT; i--, w++)
     {
         for (int j = -FOV_WIDTH, k = 0; j < FOV_WIDTH; j++, k++)
         {
             unsigned int currentWinnerId = 0;
-            int currentWinnerZ = MAX_RANGE;
+            int currentWinnerZ = 0;
             bool first = true;
             for (auto triangle : triangles)
             {
@@ -116,9 +115,39 @@ void algorithm(std::vector<Triangle> &triangles, Point &observationPoint)
     {
         for (int j = 0; j < FOV_WIDTH * 2; j++)
         {
-            printf("%5d ", fov[i][j]);
+            if (fov[i][j] != 0)
+            {
+                printf("%5d ", fov[i][j]);
+            }
+            else
+            {
+                std::cout << "      ";
+            }
         }
         std::cout << std::endl;
     }
     std::cout << std::endl;
+
+    // calculate triangle visible areas
+    for (unsigned int i = 1; i <= triangles.size(); i++)
+    {
+        unsigned int currentArea = 0;
+        for (int i = 0; i < FOV_HEIGHT * 2; i++)
+        {
+            for (int j = 0; j < FOV_WIDTH * 2; j++)
+            {
+                if (fov[i][j] == i)
+                {
+                    currentArea++;
+                }
+            }
+        }
+        for (auto triangle : triangles)
+        {
+            if (triangle.getId() == i)
+            {
+                triangle.setAreaSeen(currentArea);
+            }
+        }
+    }
 }
