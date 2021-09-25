@@ -34,4 +34,6 @@ public:
     void setP3(Point p);
     Triangle(Point p1, Point p2, Point p3);
     friend std::ostream &operator<<(std::ostream &output, Triangle const &t);
+    bool operator>(const Triangle &t) const;
+    void displayIncudeId();
 };

@@ -6,6 +6,7 @@
 #include <algorithm>
 #include "myExceptions.h"
 #include "point.h"
+#include <functional>
 
 #define FOV_WIDTH 16
 #define FOV_HEIGHT 16
@@ -132,22 +133,32 @@ void algorithm(std::vector<Triangle> &triangles, Point &observationPoint)
     for (unsigned int i = 1; i <= triangles.size(); i++)
     {
         unsigned int currentArea = 0;
-        for (int i = 0; i < FOV_HEIGHT * 2; i++)
+        for (int w = 0; w < FOV_HEIGHT * 2; w++)
         {
-            for (int j = 0; j < FOV_WIDTH * 2; j++)
+            for (int k = 0; k < FOV_WIDTH * 2; k++)
             {
-                if (fov[i][j] == i)
+                if (fov[w][k] == i)
                 {
                     currentArea++;
                 }
             }
         }
-        for (auto triangle : triangles)
+        for (auto &triangle : triangles)
         {
             if (triangle.getId() == i)
             {
                 triangle.setAreaSeen(currentArea);
+                break;
             }
         }
+    }
+
+    // sort triangles by visible areas, descend
+    std::sort(triangles.begin(), triangles.end(), std::greater<Triangle>());
+
+    // display sorted triangles
+    for (auto triangle : triangles)
+    {
+        triangle.displayIncudeId();
     }
 }

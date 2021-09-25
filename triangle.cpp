@@ -85,3 +85,13 @@ void Triangle::setAreaSeen(unsigned int area)
 {
     areaSeen = area;
 }
+
+bool Triangle::operator>(const Triangle &t) const
+{
+    return areaSeen > t.areaSeen;
+}
+
+void Triangle::displayIncudeId()
+{
+    std::cout << "Triangle " << id << ": " << areaSeen << " pixels" << std::endl;
+}
