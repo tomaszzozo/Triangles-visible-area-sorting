@@ -36,4 +36,5 @@ public:
     friend std::ostream &operator<<(std::ostream &output, Triangle const &t);
     bool operator>(const Triangle &t) const;
     void displayIncudeId();
+    void rotate(float roll, float pitch, float yaw);
 };

@@ -1,6 +1,8 @@
 #include "triangle.h"
 #include "myExceptions.h"
 #include <set>
+#include <cmath>
+#include <vector>
 
 Triangle::Triangle(Point p1, Point p2, Point p3)
 {
@@ -94,4 +96,83 @@ bool Triangle::operator>(const Triangle &t) const
 void Triangle::displayIncudeId()
 {
     std::cout << "Triangle " << id << ": " << areaSeen << " pixels" << std::endl;
+}
+
+void Triangle::rotate(float roll, float pitch, float yaw)
+{
+    float cosa = cos(yaw);
+    float sina = sin(yaw);
+
+    float cosb = cos(pitch);
+    float sinb = sin(pitch);
+
+    float cosc = cos(roll);
+    float sinc = sin(roll);
+
+    float Axx = cosa * cosb;
+    float Axy = cosa * sinb * sinc - sina * cosc;
+    float Axz = cosa * sinb * cosc + sina * sinc;
+
+    float Ayx = sina * cosb;
+    float Ayy = sina * sinb * sinc + cosa * cosc;
+    float Ayz = sina * sinb * cosc - cosa * sinc;
+
+    float Azx = -sinb;
+    float Azy = cosb * sinc;
+    float Azz = cosb * cosc;
+
+    std::vector<Point> temp;
+
+    for (auto point : borders.p1p2)
+    {
+        point.x = (int)(Axx * point.x + Axy * point.y + Axz * point.z);
+        point.y = (int)(Ayx * point.x + Ayy * point.y + Ayz * point.z);
+        point.z = (int)(Azx * point.x + Azy * point.y + Azz * point.z);
+        temp.push_back(point);
+    }
+    borders.p1p2.clear();
+    for (auto point : temp)
+    {
+        borders.p1p2.insert(point);
+    }
+    temp.clear();
+
+    for (auto point : borders.p1p3)
+    {
+        point.x = (int)(Axx * point.x + Axy * point.y + Axz * point.z);
+        point.y = (int)(Ayx * point.x + Ayy * point.y + Ayz * point.z);
+        point.z = (int)(Azx * point.x + Azy * point.y + Azz * point.z);
+    }
+    borders.p1p3.clear();
+    for (auto point : temp)
+    {
+        borders.p1p3.insert(point);
+    }
+    temp.clear();
+
+    for (auto point : borders.p2p3)
+    {
+        point.x = (int)(Axx * point.x + Axy * point.y + Axz * point.z);
+        point.y = (int)(Ayx * point.x + Ayy * point.y + Ayz * point.z);
+        point.z = (int)(Azx * point.x + Azy * point.y + Azz * point.z);
+    }
+    borders.p2p3.clear();
+    for (auto point : temp)
+    {
+        borders.p2p3.insert(point);
+    }
+    temp.clear();
+
+    for (auto point : fill)
+    {
+        point.x = (int)(Axx * point.x + Axy * point.y + Axz * point.z);
+        point.y = (int)(Ayx * point.x + Ayy * point.y + Ayz * point.z);
+        point.z = (int)(Azx * point.x + Azy * point.y + Azz * point.z);
+    }
+    fill.clear();
+    for (auto point : temp)
+    {
+        fill.insert(point);
+    }
+    temp.clear();
 }
