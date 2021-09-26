@@ -11,9 +11,8 @@
 #define FOV_WIDTH 16
 #define FOV_HEIGHT 16
 
-void calibrate(Point &observationPoint, std::vector<Triangle> &triangles, float roll, float pitch, float yaw);
-void readTriangles(std::vector<Triangle> &triangles);
-void algorithm(std::vector<Triangle> &triangles, Point &observationPoint, float roll, float pitch, float yaw);
+void readTriangles(std::vector<Triangle> &triangles, Point observationPoint, direction dir);
+void algorithm(std::vector<Triangle> &triangles);
 
 unsigned int Triangle::count = 0;
 
@@ -21,42 +20,21 @@ int main()
 {
     std::cout << "Please select observation point coordinates:\n";
     Point observationPoint(0, 0, 0);
-    std::cin >> observationPoint;
+    //std::cin >> observationPoint;
     std::cout << "\nSelected point " << observationPoint << std::endl;
 
-    float roll, pitch, yaw;
-    std::cout << "\nInput desired roll: ";
-    std::cin >> roll;
-    std::cout << "Input desired pitch: ";
-    std::cin >> pitch;
-    std::cout << "Input desired yaw: ";
-    std::cin >> yaw;
+    std::cout << "\nSelect looking direction:\n";
+    std::cout << "1.Front\n2.Back\n3.Up\n4.Down\n5.Left\n6.Right\n";
+    int option = 1;
+    //std::cin >> option;
 
     std::cout << "\nReading triangles...\n\n";
     std::vector<Triangle> triangles;
-    readTriangles(triangles);
-    algorithm(triangles, observationPoint, roll, pitch, yaw);
+    readTriangles(triangles, observationPoint, (direction)option);
+    algorithm(triangles);
 }
 
-// moves observation point to [0, 0, 0] and adjusts triangles accordingly, then rotate points
-void calibrate(Point &observationPoint, std::vector<Triangle> &triangles, float roll, float pitch, float yaw)
-{
-    for (auto triangle : triangles)
-    {
-        triangle.setP1(triangle.getP1() - observationPoint);
-        triangle.setP2(triangle.getP2() - observationPoint);
-        triangle.setP3(triangle.getP3() - observationPoint);
-    }
-    observationPoint = Point(0, 0, 0);
-
-    for (auto triangle : triangles)
-    {
-        triangle.rotate(roll, pitch, yaw);
-    }
-}
-
-// reads data from "triangles.txt"
-void readTriangles(std::vector<Triangle> &triangles)
+void readTriangles(std::vector<Triangle> &triangles, Point observationPoint, direction dir)
 {
     std::ifstream f("triangles.txt");
     if (!f.is_open())
@@ -81,17 +59,17 @@ void readTriangles(std::vector<Triangle> &triangles)
         triangles.push_back(Triangle(
             Point(std::stoi(seglist[0]), std::stoi(seglist[1]), std::stoi(seglist[2]), Triangle::count + 1),
             Point(std::stoi(seglist[3]), std::stoi(seglist[4]), std::stoi(seglist[5]), Triangle::count + 1),
-            Point(std::stoi(seglist[6]), std::stoi(seglist[7]), std::stoi(seglist[8]), Triangle::count + 1)));
+            Point(std::stoi(seglist[6]), std::stoi(seglist[7]), std::stoi(seglist[8]), Triangle::count + 1),
+            observationPoint,
+            dir));
         std::cout << "Read triangle: " << triangles.back() << std::endl;
     }
     f.close();
 }
 
 // main algorithm of the program that is responsible for sorting the triagnles
-void algorithm(std::vector<Triangle> &triangles, Point &observationPoint, float roll, float pitch, float yaw)
+void algorithm(std::vector<Triangle> &triangles)
 {
-    calibrate(observationPoint, triangles, roll, pitch, yaw);
-
     unsigned int fov[FOV_HEIGHT * 2][FOV_WIDTH * 2] = {0};
 
     for (int i = FOV_HEIGHT - 1, w = 0; i >= -FOV_HEIGHT; i--, w++)
@@ -110,7 +88,7 @@ void algorithm(std::vector<Triangle> &triangles, Point &observationPoint, float 
 
                 for (auto point : allPoints)
                 {
-                    if (point.y == i && point.x == j && (first || (point.z >= 0 && point.z < currentWinnerZ)))
+                    if (point.y == i && point.x == j && point.z >= 0 && (first || point.z < currentWinnerZ))
                     {
                         currentWinnerId = point.id;
                         currentWinnerZ = point.z;

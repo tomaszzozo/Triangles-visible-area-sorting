@@ -45,9 +45,9 @@ std::ostream &operator<<(std::ostream &output, Point const &p)
     return output;
 }
 
-Point Point::operator-(const Point &p)
+Point Point::operator+(const Point &p)
 {
-    return Point(x - p.x, y - p.y, z - p.z);
+    return Point(x + p.x, y + p.y, z + p.z, id);
 }
 
 Point Point::getMiddle(const Point &p)
@@ -71,7 +71,15 @@ bool Point::equalsIgnoresId(const Point &p)
 // implemented to make set<Point> available to use
 bool Point::operator<(const Point &p) const
 {
-    return x == p.x ? y < p.y : x < p.x;
+    if (x == p.x)
+    {
+        if (y == p.y)
+        {
+            return z < p.z;
+        }
+        return y < p.y;
+    }
+    return x < p.x;
 }
 
 bool Point::isNeighbour(const Point &p)

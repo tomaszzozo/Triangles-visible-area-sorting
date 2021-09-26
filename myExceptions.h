@@ -25,3 +25,11 @@ struct CouldNotOpenFileException : public std::exception
         return "Could not open desired file!";
     }
 };
+
+struct IncorrectDirectionException : public std::exception
+{
+    const char *what() const throw()
+    {
+        return "How did we get here?";
+    }
+};

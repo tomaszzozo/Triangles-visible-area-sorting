@@ -4,16 +4,19 @@
 #include <cmath>
 #include <vector>
 
-Triangle::Triangle(Point p1, Point p2, Point p3)
+Triangle::Triangle(Point p1, Point p2, Point p3, Point observationPoint, direction dir)
 {
     if (p1.equalsIgnoresId(p2) || p1.equalsIgnoresId(p3) || p2.equalsIgnoresId(p3))
     {
         throw SamePointsException();
     }
-    this->p1 = p1;
-    this->p2 = p2;
-    this->p3 = p3;
+    this->p1 = p1 + observationPoint;
+    this->p2 = p2 + observationPoint;
+    this->p3 = p3 + observationPoint;
     this->id = ++count;
+
+    rotate(dir);
+
     drawBorders();
     fillShape();
     areaSeen = 0;
@@ -98,81 +101,56 @@ void Triangle::displayIncudeId()
     std::cout << "Triangle " << id << ": " << areaSeen << " pixels" << std::endl;
 }
 
-void Triangle::rotate(float roll, float pitch, float yaw)
+void Triangle::rotate(direction dir)
 {
-    float cosa = cos(yaw);
-    float sina = sin(yaw);
-
-    float cosb = cos(pitch);
-    float sinb = sin(pitch);
-
-    float cosc = cos(roll);
-    float sinc = sin(roll);
-
-    float Axx = cosa * cosb;
-    float Axy = cosa * sinb * sinc - sina * cosc;
-    float Axz = cosa * sinb * cosc + sina * sinc;
-
-    float Ayx = sina * cosb;
-    float Ayy = sina * sinb * sinc + cosa * cosc;
-    float Ayz = sina * sinb * cosc - cosa * sinc;
-
-    float Azx = -sinb;
-    float Azy = cosb * sinc;
-    float Azz = cosb * cosc;
-
-    std::vector<Point> temp;
-
-    for (auto point : borders.p1p2)
+    switch (dir)
     {
-        point.x = (int)(Axx * point.x + Axy * point.y + Axz * point.z);
-        point.y = (int)(Ayx * point.x + Ayy * point.y + Ayz * point.z);
-        point.z = (int)(Azx * point.x + Azy * point.y + Azz * point.z);
-        temp.push_back(point);
-    }
-    borders.p1p2.clear();
-    for (auto point : temp)
-    {
-        borders.p1p2.insert(point);
-    }
-    temp.clear();
+    case FRONT:
+        return;
 
-    for (auto point : borders.p1p3)
-    {
-        point.x = (int)(Axx * point.x + Axy * point.y + Axz * point.z);
-        point.y = (int)(Ayx * point.x + Ayy * point.y + Ayz * point.z);
-        point.z = (int)(Azx * point.x + Azy * point.y + Azz * point.z);
-    }
-    borders.p1p3.clear();
-    for (auto point : temp)
-    {
-        borders.p1p3.insert(point);
-    }
-    temp.clear();
+    case BACK:
+        p1.z *= -1;
+        p2.z *= -1;
+        p3.z *= -1;
+        break;
 
-    for (auto point : borders.p2p3)
-    {
-        point.x = (int)(Axx * point.x + Axy * point.y + Axz * point.z);
-        point.y = (int)(Ayx * point.x + Ayy * point.y + Ayz * point.z);
-        point.z = (int)(Azx * point.x + Azy * point.y + Azz * point.z);
-    }
-    borders.p2p3.clear();
-    for (auto point : temp)
-    {
-        borders.p2p3.insert(point);
-    }
-    temp.clear();
+    case RIGHT:
+        std::swap(p1.x, p1.z);
+        std::swap(p2.x, p2.z);
+        std::swap(p3.x, p3.z);
+        p1.x *= -1;
+        p2.x *= -1;
+        p3.x *= -1;
+        break;
 
-    for (auto point : fill)
-    {
-        point.x = (int)(Axx * point.x + Axy * point.y + Axz * point.z);
-        point.y = (int)(Ayx * point.x + Ayy * point.y + Ayz * point.z);
-        point.z = (int)(Azx * point.x + Azy * point.y + Azz * point.z);
+    case UP:
+        p1.y *= -1;
+        p2.y *= -1;
+        p3.y *= -1;
+        std::swap(p1.y, p1.z);
+        std::swap(p2.y, p2.z);
+        std::swap(p3.y, p3.z);
+        break;
+
+    case DOWN:
+        std::swap(p1.y, p1.z);
+        std::swap(p2.y, p2.z);
+        std::swap(p3.y, p3.z);
+        p1.y *= -1;
+        p2.y *= -1;
+        p3.y *= -1;
+        break;
+
+    case LEFT:
+        p1.x *= -1;
+        p2.x *= -1;
+        p3.x *= -1;
+        std::swap(p1.x, p1.z);
+        std::swap(p2.x, p2.z);
+        std::swap(p3.x, p3.z);
+        break;
+
+    default:
+        throw IncorrectDirectionException();
     }
-    fill.clear();
-    for (auto point : temp)
-    {
-        fill.insert(point);
-    }
-    temp.clear();
 }

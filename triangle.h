@@ -4,6 +4,16 @@
 #include <set>
 #include "point.h"
 
+enum direction
+{
+    UP = 3,
+    DOWN = 4,
+    RIGHT = 6,
+    LEFT = 5,
+    FRONT = 1,
+    BACK = 2
+};
+
 class Triangle
 {
     Point p1, p2, p3;
@@ -32,9 +42,9 @@ public:
     void setP1(Point p);
     void setP2(Point p);
     void setP3(Point p);
-    Triangle(Point p1, Point p2, Point p3);
+    Triangle(Point p1, Point p2, Point p3, Point observationPoint, direction dir);
     friend std::ostream &operator<<(std::ostream &output, Triangle const &t);
     bool operator>(const Triangle &t) const;
     void displayIncudeId();
-    void rotate(float roll, float pitch, float yaw);
+    void rotate(direction dir);
 };
