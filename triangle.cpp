@@ -5,7 +5,7 @@
 #include <vector>
 
 // creates triagnle with given point and modifies these points to match selected observation point and looking direction
-Triangle::Triangle(Point p1, Point p2, Point p3, Point observationPoint, direction dir)
+Triangle::Triangle(Point p1, Point p2, Point p3, Point observationPoint)
 {
     if (p1.equalsIgnoresId(p2) || p1.equalsIgnoresId(p3) || p2.equalsIgnoresId(p3))
     {
@@ -14,12 +14,39 @@ Triangle::Triangle(Point p1, Point p2, Point p3, Point observationPoint, directi
     this->p1 = p1 + observationPoint;
     this->p2 = p2 + observationPoint;
     this->p3 = p3 + observationPoint;
+
+    rotate();
+
+    int minX = getLowest(p1.x, p2.x, p3.x),
+        maxX = getHighest(p1.x, p2.x, p3.x),
+        minY = getLowest(p1.y, p2.y, p3.y),
+        maxY = getHighest(p1.y, p2.y, p3.y),
+        minZ = getLowest(p1.z, p2.z, p3.z),
+        maxZ = getHighest(p1.z, p2.z, p3.z);
+
+    if (count == 0)
+    {
+        minCoords = Point(minX, minY, minZ);
+        maxCoords = Point(maxX, maxY, maxZ);
+    }
+    else
+    {
+        if (minX < minCoords.x)
+            minCoords.x = minX;
+        if (maxX > maxCoords.x)
+            maxCoords.x = maxX;
+        if (minY < minCoords.y)
+            minCoords.y = minY;
+        if (maxY > maxCoords.y)
+            maxCoords.y = maxY;
+        if (minZ < minCoords.z)
+            minCoords.y = minZ;
+        if (maxZ > maxCoords.z)
+            maxCoords.z = maxZ;
+    }
+
     this->id = ++count;
 
-    rotate(dir);
-
-    drawBorders();
-    fillShape();
     areaSeen = 0;
 }
 
@@ -46,56 +73,6 @@ bool Triangle::operator>(const Triangle &t) const
     return areaSeen > t.areaSeen;
 }
 
-// recursive algorithm that fills empty space between p1 and p2 with new points which are stored in 'line' set
-void Triangle::lineCreator(Point &p1, Point &p2, std::set<Point> &line)
-{
-    if (!p1.isNeighbour(p2))
-    {
-        Point middle = p1.getMiddle(p2);
-        lineCreator(p1, middle, line);
-        line.insert(middle);
-        lineCreator(middle, p2, line);
-    }
-}
-
-// returns set of points that would create line between p1 and p2
-std::set<Point> Triangle::drawLine(Point &p1, Point &p2)
-{
-    std::set<Point> line;
-    line.insert(p1);
-    lineCreator(p1, p2, line);
-    line.insert(p2);
-    return line;
-}
-
-// fills borders sets with points that would create borders of current triangle
-void Triangle::drawBorders()
-{
-    borders.p1p2 = drawLine(p1, p2);
-    borders.p1p3 = drawLine(p1, p3);
-    borders.p2p3 = drawLine(p2, p3);
-}
-
-// creates lines that fill up the empty space inside the triangle
-void Triangle::fillShape()
-{
-    for (auto point : borders.p2p3)
-    {
-        std::set<Point> line = drawLine(p1, point);
-        fill.insert(line.begin(), line.end());
-    }
-    for (auto point : borders.p1p2)
-    {
-        std::set<Point> line = drawLine(p3, point);
-        fill.insert(line.begin(), line.end());
-    }
-    for (auto point : borders.p1p3)
-    {
-        std::set<Point> line = drawLine(p2, point);
-        fill.insert(line.begin(), line.end());
-    }
-}
-
 // display info about triangle and its id
 void Triangle::displayIncudeId()
 {
@@ -103,56 +80,24 @@ void Triangle::displayIncudeId()
 }
 
 // transform triangle points to match passed looking direction
-void Triangle::rotate(direction dir)
+void Triangle::rotate()
 {
-    switch (dir)
+}
+
+static int getLowest(int x, int y, int z)
+{
+    if (x < y)
     {
-    case FRONT:
-        return;
-
-    case BACK:
-        p1.z *= -1;
-        p2.z *= -1;
-        p3.z *= -1;
-        break;
-
-    case RIGHT:
-        std::swap(p1.x, p1.z);
-        std::swap(p2.x, p2.z);
-        std::swap(p3.x, p3.z);
-        p1.x *= -1;
-        p2.x *= -1;
-        p3.x *= -1;
-        break;
-
-    case UP:
-        p1.y *= -1;
-        p2.y *= -1;
-        p3.y *= -1;
-        std::swap(p1.y, p1.z);
-        std::swap(p2.y, p2.z);
-        std::swap(p3.y, p3.z);
-        break;
-
-    case DOWN:
-        std::swap(p1.y, p1.z);
-        std::swap(p2.y, p2.z);
-        std::swap(p3.y, p3.z);
-        p1.y *= -1;
-        p2.y *= -1;
-        p3.y *= -1;
-        break;
-
-    case LEFT:
-        p1.x *= -1;
-        p2.x *= -1;
-        p3.x *= -1;
-        std::swap(p1.x, p1.z);
-        std::swap(p2.x, p2.z);
-        std::swap(p3.x, p3.z);
-        break;
-
-    default:
-        throw IncorrectDirectionException();
+        return x < z ? x : z;
     }
+    return y < z ? y : z;
+}
+
+static int getHighest(int x, int y, int z)
+{
+    if (x > y)
+    {
+        return x > z ? x : z;
+    }
+    return y > z ? y : z;
 }

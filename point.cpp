@@ -54,15 +54,6 @@ Point Point::operator+(const Point &p)
     return Point(x + p.x, y + p.y, z + p.z, id);
 }
 
-// return a Point that is in the middle between current Point and p
-Point Point::getMiddle(const Point &p)
-{
-    int a = ceil((float)(p.x + x) / 2);
-    int b = ceil((float)(p.y + y) / 2);
-    int c = ceil((float)(p.z + z) / 2);
-    return Point(a, b, c, id);
-}
-
 // makes 'Point != Point' possible
 bool Point::operator!=(const Point &p)
 {
@@ -87,10 +78,4 @@ bool Point::operator<(const Point &p) const
         return y < p.y;
     }
     return x < p.x;
-}
-
-// returns true if p is 1 pixel away from current Point
-bool Point::isNeighbour(const Point &p)
-{
-    return (x - p.x == 0 || abs(x - p.x) == 1) && (y - p.y == 0 || abs(y - p.y) == 1) && (z - p.z == 0 || abs(z - p.z) == 1);
 }
