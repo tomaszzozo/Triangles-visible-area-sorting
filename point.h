@@ -2,6 +2,7 @@
 #include <iostream>
 #include <vector>
 
+// structure that holds information about a single Point (x, y, z) and providing a set of methods to work with it
 struct Point
 {
     int x, y, z;

@@ -2,6 +2,8 @@
 #include <exception>
 #include <iostream>
 
+// set of my custom expressions
+
 struct FileCorruptedException : public std::exception
 {
     const char *what() const throw()

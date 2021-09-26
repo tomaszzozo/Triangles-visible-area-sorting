@@ -4,6 +4,7 @@
 #include <set>
 #include "point.h"
 
+// enum containing information about where does the user want to look
 enum direction
 {
     UP = 3,
@@ -14,6 +15,8 @@ enum direction
     BACK = 2
 };
 
+// class containing info about a single triangle, its points and its visible area
+// methods explained in trinagle.cpp file
 class Triangle
 {
     Point p1, p2, p3;
