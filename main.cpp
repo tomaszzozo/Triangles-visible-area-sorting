@@ -28,7 +28,7 @@ int main()
     std::cout << "\nSelected point " << observationPoint << std::endl;
 
     std::cout << "\nSelect looking direction:\n";
-    std::cout << "1.Front\n2.Back\n3.Up\n4.Down\n5.Left\n6.Right\n";
+    std::cout << "1.Forward\n2.Backward\n3.Up\n4.Down\n5.Left\n6.Right\n";
     int option = 1;
     std::cin >> option;
 
