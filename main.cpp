@@ -77,7 +77,7 @@ void readTriangles(std::vector<Triangle> &triangles, Point observationPoint, dir
             dir));
         std::cout << "Read triangle: " << triangles.back() << std::endl;
     }
-
+    std::cout << std::endl;
     f.close();
 }
 
