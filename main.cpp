@@ -89,7 +89,7 @@ void algorithm(std::vector<Triangle> &triangles)
         // iterate through every FOX column
         for (int x = -FOV_WIDTH; x < FOV_WIDTH; x++)
         {
-            // iterate thorug every depth
+            // iterate thorugh every depth
             for (int z = 0; z <= Triangle::maxZ; z++)
             {
                 // flag for moving onto nextx pixel if point was found
@@ -113,7 +113,7 @@ void algorithm(std::vector<Triangle> &triangles)
     }
 
     // sort triangles by visible areas, descend
-    std::sort(triangles.begin(), triangles.end(), std::greater<Triangle>());
+    std::stable_sort(triangles.begin(), triangles.end(), std::greater<Triangle>());
 
     // display sorted triangles
     for (auto triangle : triangles)

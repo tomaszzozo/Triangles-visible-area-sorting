@@ -1,0 +1,47 @@
+Podczas obliczania złożoności obliczeniowej uwzględnimy następujące fakty:
+
+1) FOV_WIDTH oraz FOV_HEIGHT są zdefiniowane jako stałe i nie zostały stworzone aby zmieniać je na porządku dziennym, dlatego iterację po tablicy dwuwymiarowej
+   o takich wymiarach uznamy za proces o złożoności stałej (ilość widocznych pikseli nie zmieni się od dodania trójkątów).
+2) Algorytm zadania tyczy się sortowania trójkątów podług widocznych pól a nie wczytywaniu ich struktur z pliku, dlatego też będziemy rozpatrywać tylko funkcję algorythm.
+3) Funkcja sortująca jest wbudowana dlatego uznamy jej złożoność jako N log N, 
+   źródło: https://www.geeksforgeeks.org/internal-details-of-stdsort-in-c/
+4) isPointInside ma złożoność stałą, bo zawsze wykonuje operacje na tej samej ilości elementów
+
+
+
+void algorithm(std::vector<Triangle> &triangles)
+{
+    for (int y = FOV_HEIGHT - 1; y >= -FOV_HEIGHT; y--)  -> const
+    {
+        for (int x = -FOV_WIDTH; x < FOV_WIDTH; x++)  -> const
+        {
+            for (int z = 0; z <= Triangle::maxZ; z++)  -> O(n)
+            {
+                bool stop = false;
+                for (auto &triangle : triangles)  -> O(n)
+                {
+                    if (triangle.isPointInside(Point(x, y, z)))
+                    {
+                        triangle.incrementArea();  -> const
+                        stop = true;
+                        break;
+                    }
+                }
+                if (stop)
+                    break;
+            }
+        }
+    }
+
+    std::stable_sort(triangles.begin(), triangles.end(), std::greater<Triangle>());  -> N log N
+
+    for (auto triangle : triangles)  -> O(n)
+    {
+        triangle.displayIncudeId();
+    }
+}
+
+
+Obliczenia: O(n*n+ NlogN + n)= O(2n^2 + NlogN) = O(n^2)
+
+Wniosek: algorytm posiada kwadratową złożoność obliczeniową.
