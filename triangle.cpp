@@ -11,17 +11,18 @@ Triangle::Triangle(Point p1, Point p2, Point p3, Point observationPoint, directi
     {
         throw SamePointsException();
     }
+    // move this triangle points accordingly to observation point
     this->p1 = p1 + observationPoint;
     this->p2 = p2 + observationPoint;
     this->p3 = p3 + observationPoint;
 
     int z = getHighest(p1.z, p2.z, p3.z);
-
     if (count == 0 || maxZ < z)
         maxZ = z;
 
     id = ++count;
 
+    // transform points if we are not looking forward
     switch (dir)
     {
     case FRONT:
@@ -120,6 +121,7 @@ void Triangle::incrementArea()
 
 bool Triangle::isPointInside(Point p)
 {
+    // if point is one of triangle vericies, simply return true
     if (p.equalsIgnoresId(p1) || p.equalsIgnoresId(p2) || p.equalsIgnoresId(p3))
         return true;
 
@@ -135,9 +137,11 @@ bool Triangle::isPointInside(Point p)
 
     double equation = angleBetweenVectors(vP1, vP2) + angleBetweenVectors(vP2, vP3) + angleBetweenVectors(vP1, vP3);
 
+    // leave 0.1 headroom for errors since computers have problems with floats
     return abs(2 * M_PI - equation) < 0.1;
 }
 
+// calculate angle between vectors
 double Triangle::angleBetweenVectors(const Point vector1, const Point vector2)
 {
     return acos((double)(vector1.x * vector2.x + vector1.y * vector2.y + vector1.z * vector2.z) / (sqrt(vector1.x * vector1.x + vector1.y * vector1.y + vector1.z * vector1.z) * sqrt(vector2.x * vector2.x + vector2.y * vector2.y + vector2.z * vector2.z)));

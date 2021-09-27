@@ -83,15 +83,21 @@ void readTriangles(std::vector<Triangle> &triangles, Point observationPoint, dir
 
 void algorithm(std::vector<Triangle> &triangles)
 {
+    // iterate through every FOV row
     for (int y = FOV_HEIGHT - 1; y >= -FOV_HEIGHT; y--)
     {
+        // iterate through every FOX column
         for (int x = -FOV_WIDTH; x < FOV_WIDTH; x++)
         {
+            // iterate thorug every depth
             for (int z = 0; z <= Triangle::maxZ; z++)
             {
+                // flag for moving onto nextx pixel if point was found
                 bool stop = false;
+                // iterate through every triangle
                 for (auto &triangle : triangles)
                 {
+                    // if current point (x,y,z) is inside current triangle, increment its area and move onto the next pixel
                     if (triangle.isPointInside(Point(x, y, z)))
                     {
                         triangle.incrementArea();
@@ -99,6 +105,7 @@ void algorithm(std::vector<Triangle> &triangles)
                         break;
                     }
                 }
+                // if point was found stop adding to depth
                 if (stop)
                     break;
             }

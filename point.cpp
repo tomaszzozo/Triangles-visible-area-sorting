@@ -56,28 +56,8 @@ Point Point::operator+(const Point &p)
     return Point(x + p.x, y + p.y, z + p.z, id);
 }
 
-// makes 'Point != Point' possible
-bool Point::operator!=(const Point &p)
-{
-    return x != p.x || y != p.y || z != p.z || id != p.id;
-}
-
 // compares two points but ignores their id's
 bool Point::equalsIgnoresId(const Point &p)
 {
     return x == p.x && y == p.y && z == p.z;
-}
-
-// implemented to make set<Point> available to use, makes 'Point < Point' possible
-bool Point::operator<(const Point &p) const
-{
-    if (x == p.x)
-    {
-        if (y == p.y)
-        {
-            return z < p.z;
-        }
-        return y < p.y;
-    }
-    return x < p.x;
 }

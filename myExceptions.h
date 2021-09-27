@@ -32,6 +32,6 @@ struct IncorrectDirectionException : public std::exception
 {
     const char *what() const throw()
     {
-        return "How did we get here?";
+        return "Incorrect direction!";
     }
 };

@@ -15,7 +15,5 @@ struct Point
     friend std::istream &operator>>(std::istream &input, Point &p);
     friend std::ostream &operator<<(std::ostream &output, Point const &p);
     Point operator+(const Point &p);
-    bool operator!=(const Point &p);
     bool equalsIgnoresId(const Point &p);
-    bool operator<(const Point &p) const;
 };
