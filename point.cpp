@@ -2,6 +2,8 @@
 #include <cmath>
 #include <vector>
 
+Point::Point(){};
+
 // creates point with given coords and id 0
 Point::Point(int x, int y, int z)
 {
