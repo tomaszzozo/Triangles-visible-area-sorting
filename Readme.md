@@ -26,7 +26,7 @@
 🇵🇱 Będziesz musiał zainstalować kompilator MinGW aby skompilować kod źródłowy do pliku .exe. Kiedy zainstalujesz kompilator, uruchom tę komendę w terminalu otwartym w katalogu z projektem:
 
 ```
-g++ -std=c++14 \*.cpp -o main
+g++ -std=c++14 *.cpp -o main
 ```
 
 ## Project structure
