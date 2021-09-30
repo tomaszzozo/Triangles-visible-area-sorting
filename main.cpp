@@ -85,17 +85,20 @@ void algorithm(std::vector<Triangle> &triangles)
 {
     Point start(Triangle::minCoords.x > -FOV_WIDTH ? Triangle::minCoords.x : -FOV_WIDTH, Triangle::maxCoords.y < FOV_HEIGHT - 1 ? Triangle::maxCoords.y : FOV_HEIGHT - 1, Triangle::minCoords.z > 0 ? Triangle::minCoords.z : 0),
         stop(Triangle::maxCoords.x < FOV_WIDTH ? Triangle::maxCoords.x : FOV_WIDTH, Triangle::minCoords.y > -FOV_HEIGHT ? Triangle::minCoords.y : -FOV_HEIGHT, Triangle::maxCoords.z);
+
+    std::cout << "Field of view (empty space around ignored):\n\n";
     // iterate through every FOV row
     for (int y = start.y; y >= stop.y; y--)
     {
         // iterate through every FOX column
         for (int x = start.x; x <= stop.x; x++)
         {
+            bool found = false;
             // iterate thorugh every depth
             for (int z = start.z; z <= stop.z; z++)
             {
                 // flag for moving onto nextx pixel if point was found
-                bool stop = false;
+                found = false;
                 // iterate through every triangle
                 for (auto &triangle : triangles)
                 {
@@ -103,16 +106,21 @@ void algorithm(std::vector<Triangle> &triangles)
                     if (triangle.isPointInside(Point(x, y, z)))
                     {
                         triangle.incrementArea();
-                        stop = true;
+                        std::cout << triangle.getId();
+                        found = true;
                         break;
                     }
                 }
                 // if point was found stop adding to depth
-                if (stop)
+                if (found)
                     break;
             }
+            if (!found)
+                std::cout << ' ';
         }
+        std::cout << std::endl;
     }
+    std::cout << std::endl;
 
     // sort triangles by visible areas, descend
     std::sort(triangles.begin(), triangles.end(), std::greater<Triangle>());
