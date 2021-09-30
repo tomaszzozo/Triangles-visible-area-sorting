@@ -18,6 +18,7 @@ Simply double click "main" file
 
 You will need to install MinGW compilator to compile the source code to .exe file.
 Once installed, you should run this command in your terminal opened in the projects directory:
-'''
+
+```
 g++ -std=c++14 \*.cpp -o main
-'''
+```
