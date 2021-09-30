@@ -25,7 +25,7 @@ class Triangle
 
 public:
     static unsigned int count;
-    static int maxZ;
+    static Point maxCoords, minCoords;
     Point getP1();
     Point getP2();
     Point getP3();
@@ -40,5 +40,6 @@ public:
     bool operator>(const Triangle &t) const;
     void displayIncudeId();
     int getHighest(int x, int y, int z);
+    int getLowest(int x, int y, int z);
     bool isPointInside(Point p);
 };

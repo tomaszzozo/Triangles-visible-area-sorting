@@ -50,7 +50,7 @@ std::ostream &operator<<(std::ostream &output, Point const &p)
     return output;
 }
 
-// makes adding points possible
+// makes adding points possible Point + Point
 Point Point::operator+(const Point &p)
 {
     return Point(x + p.x, y + p.y, z + p.z, id);

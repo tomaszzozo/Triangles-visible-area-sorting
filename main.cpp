@@ -17,20 +17,20 @@ void algorithm(std::vector<Triangle> &triangles);
 
 // static variable that keeps track of created triangles count and also max depth
 unsigned int Triangle::count = 0;
-int Triangle::maxZ = 0;
+Point Triangle::maxCoords, Triangle::minCoords;
 
 int main()
 {
     // select observation point
     std::cout << "Please select observation point coordinates:\n";
     Point observationPoint(0, 0, 0);
-    std::cin >> observationPoint;
+    //std::cin >> observationPoint;
     std::cout << "\nSelected point " << observationPoint << std::endl;
 
     std::cout << "\nSelect looking direction:\n";
     std::cout << "1.Forward\n2.Backward\n3.Up\n4.Down\n5.Left\n6.Right\n";
     int option = 1;
-    std::cin >> option;
+    //std::cin >> option;
 
     // read triangles from file
     std::cout << "\nReading triangles...\n\n";
@@ -83,14 +83,16 @@ void readTriangles(std::vector<Triangle> &triangles, Point observationPoint, dir
 
 void algorithm(std::vector<Triangle> &triangles)
 {
+    Point start(Triangle::minCoords.x > -FOV_WIDTH ? Triangle::minCoords.x : -FOV_WIDTH, Triangle::maxCoords.y < FOV_HEIGHT - 1 ? Triangle::maxCoords.y : FOV_HEIGHT - 1, Triangle::minCoords.z > 0 ? Triangle::minCoords.z : 0),
+        stop(Triangle::maxCoords.x < FOV_WIDTH ? Triangle::maxCoords.x : FOV_WIDTH, Triangle::minCoords.y > -FOV_HEIGHT ? Triangle::minCoords.y : -FOV_HEIGHT, Triangle::maxCoords.z);
     // iterate through every FOV row
-    for (int y = FOV_HEIGHT - 1; y >= -FOV_HEIGHT; y--)
+    for (int y = start.y; y >= stop.y; y--)
     {
         // iterate through every FOX column
-        for (int x = -FOV_WIDTH; x < FOV_WIDTH; x++)
+        for (int x = start.x; x <= stop.x; x++)
         {
             // iterate thorugh every depth
-            for (int z = 0; z <= Triangle::maxZ; z++)
+            for (int z = start.z; z <= stop.z; z++)
             {
                 // flag for moving onto nextx pixel if point was found
                 bool stop = false;
@@ -113,7 +115,7 @@ void algorithm(std::vector<Triangle> &triangles)
     }
 
     // sort triangles by visible areas, descend
-    std::stable_sort(triangles.begin(), triangles.end(), std::greater<Triangle>());
+    std::sort(triangles.begin(), triangles.end(), std::greater<Triangle>());
 
     // display sorted triangles
     for (auto triangle : triangles)

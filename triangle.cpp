@@ -16,9 +16,31 @@ Triangle::Triangle(Point p1, Point p2, Point p3, Point observationPoint, directi
     this->p2 = p2 + observationPoint;
     this->p3 = p3 + observationPoint;
 
-    int z = getHighest(p1.z, p2.z, p3.z);
-    if (count == 0 || maxZ < z)
-        maxZ = z;
+    Point thisMax(getHighest(p1.x, p2.x, p3.x), getHighest(p1.y, p2.y, p3.y), getHighest(p1.z, p2.z, p3.z));
+    Point thisMin(getLowest(p1.x, p2.x, p3.x), getLowest(p1.y, p2.y, p3.y), getLowest(p1.z, p2.z, p3.z));
+
+    if (count == 0)
+    {
+        maxCoords = thisMax;
+        minCoords = thisMin;
+    }
+    else
+    {
+        if (maxCoords.x < thisMax.x)
+            maxCoords.x = thisMax.x;
+        if (minCoords.x > thisMin.x)
+            minCoords.x = thisMin.x;
+
+        if (maxCoords.y < thisMax.y)
+            maxCoords.y = thisMax.y;
+        if (minCoords.y > thisMin.y)
+            minCoords.y = thisMin.y;
+
+        if (maxCoords.z < thisMax.z)
+            maxCoords.z = thisMax.z;
+        if (minCoords.z > thisMin.z)
+            minCoords.z = thisMin.z;
+    }
 
     id = ++count;
 
@@ -145,4 +167,13 @@ bool Triangle::isPointInside(Point p)
 double Triangle::angleBetweenVectors(const Point vector1, const Point vector2)
 {
     return acos((double)(vector1.x * vector2.x + vector1.y * vector2.y + vector1.z * vector2.z) / (sqrt(vector1.x * vector1.x + vector1.y * vector1.y + vector1.z * vector1.z) * sqrt(vector2.x * vector2.x + vector2.y * vector2.y + vector2.z * vector2.z)));
+}
+
+int Triangle::getLowest(int x, int y, int z)
+{
+    if (x < y)
+    {
+        return x < z ? x : z;
+    }
+    return y < z ? y : z;
 }
