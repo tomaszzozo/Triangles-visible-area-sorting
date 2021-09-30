@@ -12,7 +12,7 @@ This project is written entirely in C++.
 
 ### Mac and Linux
 
-Simply double click "main" file
+Simply double click "main" file.
 
 ### Windows
 
