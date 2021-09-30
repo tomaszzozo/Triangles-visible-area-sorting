@@ -8,9 +8,8 @@
 
 ## Technologies
 
-🇬🇧 This project is written entirely in C++.
-
-🇵🇱 Ten projekt jest napisany całkowicie w C++.
+- C++
+- Visual Studio Code
 
 ## Launch
 
@@ -29,3 +28,35 @@
 ```
 g++ -std=c++14 \*.cpp -o main
 ```
+
+## Project structure
+
+### main.cpp
+
+🇬🇧 This file contains main algorithm of the program. It is also responsible for reading triangles from file.
+
+🇵🇱 Ten plik zawiera główny algorytm programu. Jest również odpowiedzialny za wczytywanie trójkątów z pliku.
+
+### triangle.h/cpp
+
+🇬🇧 These files contain Triangle class made for storing data about tiangles read from the file. They also contain enum that deifnes possible looking directions.
+
+🇵🇱 Te pliki zawierają klasę Triangle stworzoną do przechowywania danych o trójkątach wczytanych z pliku. Zawierają też typ enumeryczny definiujący możliwe kierunki patrzenia.
+
+### point.h/cpp
+
+🇬🇧 These files contain Point structure made for storing information about a particular point. It can hold triangles verticies but also observation point and 3d coordinates in general.
+
+🇵🇱 Te pliki zawierają strukturę Point stworzoną do przechowywania informacji o konkretnym punkcie. Może ona przechowywać wierzchołki trójkąta, ale również punkt obserwacyjny jak i ogólne współrzędne 3d czegokolwiek.
+
+### myExtentions.h
+
+🇬🇧 This file contains my custom defined exceptions.
+
+🇵🇱 Ten plik zawiera moje własne rodzaje wyjątków.
+
+### Other files
+
+🇬🇧 Other files are neccesary for Visual Studio Code to run this project correctly.
+
+🇵🇱 Inne pliki są używane przez Visual Studio Code do poprawnego uruchamiania tego projektu.
