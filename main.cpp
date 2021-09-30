@@ -24,13 +24,13 @@ int main()
     // select observation point
     std::cout << "Please select observation point coordinates:\n";
     Point observationPoint(0, 0, 0);
-    //std::cin >> observationPoint;
+    std::cin >> observationPoint;
     std::cout << "\nSelected point " << observationPoint << std::endl;
 
     std::cout << "\nSelect looking direction:\n";
     std::cout << "1.Forward\n2.Backward\n3.Up\n4.Down\n5.Left\n6.Right\n";
     int option = 1;
-    //std::cin >> option;
+    std::cin >> option;
 
     // read triangles from file
     std::cout << "\nReading triangles...\n\n";
