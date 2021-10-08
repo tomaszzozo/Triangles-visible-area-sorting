@@ -92,7 +92,7 @@ These files contain Triangle class made for storing data about tiangles read fro
 
 ### point.h/cpp
 
-These files contain Point structure made for storing information about a particular point. It can hold triangles verticies but also observation point and 3d coordinates in general.
+These files contain Point structure made for storing information about a particular point. It can hold triangle's verticies but also observation point and 3d coordinates in general.
 
 ### myExtentions.h
 
