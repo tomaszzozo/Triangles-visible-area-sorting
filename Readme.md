@@ -10,7 +10,7 @@
 
 ## Introduction
 
-This projects aim is to calculate visible area of triangles being given the triangle verticies stored in a text file, observation point and looking directory in an infinite 3d space.
+This project's aim is to calculate visible area of triangles being given the triangle verticies stored in a text file, observation point and looking directory in an infinite 3d space.
 
 ## Example program run
 
